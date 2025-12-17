@@ -10,7 +10,7 @@ app.use(express.static("public"));
 //auto refresh
 const path = require("path");
 const livereload = require("livereload");
-const liveReloadServer = livereload.createServer();
+const liveReloadServer = livereload.createServer({});
 liveReloadServer.watch(path.join(__dirname, "public"));
 
 const connectLivereload = require("connect-livereload");
@@ -23,8 +23,15 @@ liveReloadServer.server.once("connection", () => {
 });
 
 //GET requests
+
 app.get("/", (req, res) => {
-  res.render("index", {});
+  User.find()
+    .then((result) => {
+      res.render("index", { arr: result });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 app.get("/user/add.html", (req, res) => {
