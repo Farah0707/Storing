@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 const mongoose = require("mongoose");
 app.use(express.urlencoded({ extended: true }));
-const Mydata = require("./models/mydataSchema");
+const User = require("./models/customerSchema");
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
@@ -22,10 +22,31 @@ liveReloadServer.server.once("connection", () => {
   }, 100);
 });
 
+//GET requests
 app.get("/", (req, res) => {
-  Mydata.find()
-    .then((result) => {
-      res.render("home", { mytitle: "Home Page", arr: result });
+  res.render("index", {});
+});
+
+app.get("/user/add.html", (req, res) => {
+  res.render("user/add");
+});
+
+app.get("/user/view.html", (req, res) => {
+  res.render("user/view");
+});
+
+app.get("/user/edit.html", (req, res) => {
+  res.render("user/edit");
+});
+
+//POST requests
+app.post("/user/add.html", (req, res) => {
+  console.log(req.body);
+  const user = new User(req.body);
+  user
+    .save()
+    .then(() => {
+      res.redirect("/user/add.html");
     })
     .catch((err) => {
       console.log(err);
@@ -44,16 +65,3 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-
-app.post("/", (req, res) => {
-  console.log(req.body);
-  const mydata = new Mydata(req.body);
-  mydata
-    .save()
-    .then((result) => {
-      res.redirect("/");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
