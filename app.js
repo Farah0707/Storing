@@ -4,13 +4,32 @@ const port = 3000;
 const mongoose = require("mongoose");
 app.use(express.urlencoded({ extended: true }));
 const Mydata = require("./models/mydataSchema");
+app.set("view engine", "ejs");
+app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-  res.sendFile("./views/home.html", { root: __dirname });
+//auto refresh
+const path = require("path");
+const livereload = require("livereload");
+const liveReloadServer = livereload.createServer();
+liveReloadServer.watch(path.join(__dirname, "public"));
+
+const connectLivereload = require("connect-livereload");
+app.use(connectLivereload());
+
+liveReloadServer.server.once("connection", () => {
+  setTimeout(() => {
+    liveReloadServer.refresh("/");
+  }, 100);
 });
 
-app.get("/index.html", (req, res) => {
-  res.send("<h1>data saved successfully</h1>");
+app.get("/", (req, res) => {
+  Mydata.find()
+    .then((result) => {
+      res.render("home", { mytitle: "Home Page", arr: result });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 mongoose
@@ -32,7 +51,7 @@ app.post("/", (req, res) => {
   mydata
     .save()
     .then((result) => {
-      res.redirect("/index.html");
+      res.redirect("/");
     })
     .catch((err) => {
       console.log(err);
