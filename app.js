@@ -70,7 +70,7 @@ app.post("/user/add.html", (req, res) => {
   user
     .save()
     .then(() => {
-      res.redirect("/user/add.html");
+      res.redirect("/");
     })
     .catch((err) => {
       console.log(err);

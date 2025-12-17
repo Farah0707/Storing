@@ -99,8 +99,9 @@
     <main class="d-flex flex-nowrap">
       <%- include('./components/sidebar.ejs', {currentPage: "index"}) %>
       <section class="w-100">
-        <%- include('./components/navbar.ejs') %>
-
+        <%- include('./components/navbar.ejs') %> <% if (arr.length===0) { %>
+        <h1 style="text-align: center; margin-top: 4rem;">No customers found</h1>
+        <% } %> <% if (arr.length>0) { %>
         <table
           style="width: 99%"
           class="text-center mx-auto table mt-5 table-striped table-bordered">
@@ -144,7 +145,7 @@
                   <i class="bi bi-pencil"></i>
                 </a>
                 <form
-                style="display: inline;"
+                  style="display: inline"
                   action="/edit/<%= item._id %>?_method=DELETE"
                   method="post">
                   <button
@@ -160,6 +161,7 @@
             <% }) %>
           </tbody>
         </table>
+        <% } %>
       </section>
     </main>
     <script src="./js/bootstrap.bundle.min.js"></script>
