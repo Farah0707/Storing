@@ -120,18 +120,18 @@
             <% arr.forEach((item,index) => { %>
             <tr>
               <th scope="row"><%= index + 1 %></th>
-              <td><%= item.firstName %> <%= item.lastName %>  </td>
+              <td><%= item.firstName %> <%= item.lastName %></td>
               <td><%= item.gender %></td>
               <td><%= item.country %></td>
               <td><%= item.age %></td>
-              <td><%= item.lastUpdated %></td>
+              <td><%=moment(item.updatedAt).fromNow(); %></td>
               <td>
                 <a
                   data-bs-toggle="tooltip"
                   data-bs-title="View details"
                   data-bs-placement="top"
                   class="btn btn-primary btn-sm"
-                  href="./user/view.html">
+                  href="/view/<%= item._id %>">
                   <i class="bi bi-eye"></i>
                 </a>
 
@@ -140,20 +140,24 @@
                   data-bs-title="Edit user"
                   data-bs-placement="top"
                   class="btn btn-primary btn-sm"
-                  href="./user/edit.html">
+                  href="./edit/<%= item._id %>">
                   <i class="bi bi-pencil"></i>
                 </a>
-                <button
-                  data-bs-toggle="tooltip"
-                  data-bs-title="Delete user"
-                  data-bs-placement="top"
-                  class="btn btn-danger btn-sm">
-                  <i class="bi bi-trash"></i>
-                </button>
+                <form
+                style="display: inline;"
+                  action="/edit/<%= item._id %>?_method=DELETE"
+                  method="post">
+                  <button
+                    data-bs-toggle="tooltip"
+                    data-bs-title="Delete user"
+                    data-bs-placement="top"
+                    class="btn btn-danger btn-sm">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
               </td>
             </tr>
             <% }) %>
-            
           </tbody>
         </table>
       </section>
